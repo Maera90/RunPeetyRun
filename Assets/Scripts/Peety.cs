@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,13 +18,15 @@ public class Peety : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-    private float velocityY = 0;
-	void update () {
+    private float positionY = 0;
+   
+	void Update () {
      
-        Debug.Log(velocityY*Time.deltaTime);
-	    if (rigidBody.velocity.y  > velocityY)
+        //Debug.Log(rigidBody.velocity.y);
+	    
+	    if (rigidBody.position.y  > positionY )
 	    {
-
+            Debug.Log("GoesUp");
 	        if (!animator.GetBool("GoesUp"))
 	        {
 	            animator.SetBool("GoesUp",true);
@@ -35,8 +38,10 @@ public class Peety : MonoBehaviour
 	       
             
 
-	    }else if (rigidBody.velocity.y < velocityY)
+	    }
+        else if (rigidBody.position.y < positionY)
 	    {
+	        Debug.Log("GoesDown");
 	        if (animator.GetBool("GoesUp"))
 	        {
 	            animator.SetBool("GoesUp",false);
@@ -48,6 +53,8 @@ public class Peety : MonoBehaviour
 	    }
 	    else
 	    {
+	        Debug.Log("Running");
+
 	        if (animator.GetBool("GoesUp"))
 	        {
 	            animator.SetBool("GoesUp",false);
@@ -58,11 +65,9 @@ public class Peety : MonoBehaviour
 	        }
 	    }
 
-	    velocityY = rigidBody.velocity.y;
-        
-
-
-	}
+        //velocityY = rigidBody.velocity.y;
+        positionY = rigidBody.position.y;
+    }
 
     public void Run()
     {
