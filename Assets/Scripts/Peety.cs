@@ -22,47 +22,23 @@ public class Peety : MonoBehaviour
    
 	void Update () {
      
-        //Debug.Log(rigidBody.velocity.y);
+        Debug.Log(rigidBody.position.y);
 	    
 	    if (rigidBody.position.y  > positionY )
 	    {
             Debug.Log("GoesUp");
-	        if (!animator.GetBool("GoesUp"))
-	        {
-	            animator.SetBool("GoesUp",true);
-	        }
-	        if (animator.GetBool("GoesDown"))
-	        {
-	            animator.SetBool("GoesDown",false);
-	        }
-	       
-            
-
+	       animator.SetInteger("JumpState",1);
 	    }
         else if (rigidBody.position.y < positionY)
 	    {
 	        Debug.Log("GoesDown");
-	        if (animator.GetBool("GoesUp"))
-	        {
-	            animator.SetBool("GoesUp",false);
-	        }
-	        if (!animator.GetBool("GoesDown"))
-	        {
-	            animator.SetBool("GoesDown",true);
-	        }
+	        animator.SetInteger("JumpState",2);
 	    }
-	    else
+	    else if(rigidBody.position.y < -2.15f)
 	    {
 	        Debug.Log("Running");
 
-	        if (animator.GetBool("GoesUp"))
-	        {
-	            animator.SetBool("GoesUp",false);
-	        }
-	        if (animator.GetBool("GoesDown"))
-	        {
-	            animator.SetBool("GoesDown",false);
-	        }
+	        animator.SetInteger("JumpState",0);
 	    }
 
         //velocityY = rigidBody.velocity.y;
