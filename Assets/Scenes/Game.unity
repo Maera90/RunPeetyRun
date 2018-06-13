@@ -948,6 +948,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cae6d912b01fbd45aab80853e0cf622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _peety: {fileID: 206537251}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class MainController : MonoBehaviour
 {
-    private GameObject PeetyGO;
-    private Peety _peety;
+
+    public Peety _peety;
     private GameObject EnviromentEngineGO;
 
     private EnvironmentEngine _environmentEngine;
 	// Use this for initialization
 	void Start () {
-		PeetyGO = GameObject.Find("Peety");
-	    _peety = PeetyGO.GetComponent<Peety>();
+
         EnviromentEngineGO = GameObject.Find("EnvironmentEngine");
 	    _environmentEngine = EnviromentEngineGO.GetComponent<EnvironmentEngine>();
 	}
