@@ -19,12 +19,17 @@ public class Peety : MonoBehaviour
 	
 	// Update is called once per frame
     private float positionY = 0;
-   
+    
 	void Update () {
      
         Debug.Log(rigidBody.position.y);
 	    
-	    if (rigidBody.position.y  > positionY )
+	    if(rigidBody.position.y < -2f)
+	    {
+	        Debug.Log("Running");
+
+	        animator.SetInteger("JumpState",0);
+	    }else if (rigidBody.position.y  > positionY )
 	    {
             Debug.Log("GoesUp");
 	       animator.SetInteger("JumpState",1);
@@ -32,14 +37,9 @@ public class Peety : MonoBehaviour
         else if (rigidBody.position.y < positionY)
 	    {
 	        Debug.Log("GoesDown");
-	        animator.SetInteger("JumpState",2);
-	    }
-	    else if(rigidBody.position.y < -2.15f)
-	    {
-	        Debug.Log("Running");
-
 	        animator.SetInteger("JumpState",0);
 	    }
+	    
 
         //velocityY = rigidBody.velocity.y;
         positionY = rigidBody.position.y;
