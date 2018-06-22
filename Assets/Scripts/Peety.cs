@@ -8,7 +8,7 @@ public class Peety : MonoBehaviour
     Animator animator;
     private Animation anim;
     private Rigidbody2D rigidBody;
-    public bool isJumping = false;
+    public int JumpSpeed;
 
 	// Use this for initialization
 	void Start ()
@@ -28,7 +28,7 @@ public class Peety : MonoBehaviour
 	    if(rigidBody.position.y < -2f)
 	    {
 	        Debug.Log("Running");
-            isJumping = false;
+            
 	        animator.SetInteger("JumpState",0);
 	    }else if (rigidBody.position.y  > positionY )
 	    {
@@ -54,10 +54,10 @@ public class Peety : MonoBehaviour
 
     public void Jump()
     {
-        if (!isJumping)
+        if (animator.GetInteger("JumpState") == 0)
         {
-            isJumping = true;
-            rigidBody.velocity = Vector2.up * 5;
+
+            rigidBody.velocity = Vector2.up * JumpSpeed;
             
         }
        

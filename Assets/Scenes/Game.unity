@@ -543,7 +543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 775dbbb5ef1e0d846b89e65c7455d025, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isJumping: 0
+  JumpSpeed: 7
 --- !u!61 &206537252
 BoxCollider2D:
   m_ObjectHideFlags: 0
