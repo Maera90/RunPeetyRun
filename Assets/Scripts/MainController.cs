@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainController : MonoBehaviour
 {
@@ -23,10 +24,16 @@ public class MainController : MonoBehaviour
 
 	    if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
 	    {
+	        if (_environmentEngine.gameFinished)
+	        {
+	            Scene sceneToReload = SceneManager.GetActiveScene();
+                SceneManager.LoadScene(sceneToReload.name);
+	        }
+
 	        if (!_environmentEngine.gameStarted)
 	        {
 	            _peety.Run();
-	            _environmentEngine.gameStarted = true;
+	            _environmentEngine.StartGame();
 
 	        }
 	        else
@@ -37,5 +44,11 @@ public class MainController : MonoBehaviour
 
 	    #endregion
 
-    }
+        //Set Peety Speed Running animation speed
+	   
+
+
+	}
+
+    
 }

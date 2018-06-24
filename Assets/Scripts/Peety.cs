@@ -46,7 +46,12 @@ public class Peety : MonoBehaviour
 
         //velocityY = rigidBody.velocity.y;
         positionY = rigidBody.position.y;
-    }
+
+
+        //Set Running animation speed
+        animator.speed = environmentEngine.speedMultiplicator * 1;
+	    //anim["Running"].speed = environmentEngine.speedMultiplicator * anim["Running"].speed;
+	}
 
     public void Run()
     {
@@ -65,22 +70,16 @@ public class Peety : MonoBehaviour
        
     }
 
-    void OnCollisionEnter2D(Collision2D col)
-    {
-       
-    }
-
-    void OnCollisionExit2D(Collision2D col)
-    {
-
-    }
+   
 
     void OnTriggerEnter2D(Collider2D col)
     {
         GameObject collisionGO = col.gameObject;
         if (collisionGO.CompareTag("Rock"))
         {
-            environmentEngine.gameFinished = true;
+            environmentEngine.FinishGame();
+            animator.SetBool("IsDead",true);
+
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using Assets.Scripts.Helpers;
 using UnityEngine;
 using UnityEngine.Assertions.Comparers;
+using UnityEngine.UI;
 using Random = System.Random;
 
 public class EnvironmentEngine : MonoBehaviour
@@ -13,6 +14,8 @@ public class EnvironmentEngine : MonoBehaviour
     public float speed;
     public bool gameStarted;
     public bool gameFinished;
+    public int points = 0;
+    public float speedMultiplicator = 1;
 
     private GameObject FloorEngine;
     private GameObject CameraGO;
@@ -21,6 +24,15 @@ public class EnvironmentEngine : MonoBehaviour
     private GameObject BackgroundProvider;
     private GameObject BackBackgroundEngine;
     private GameObject ObstacleEngine;
+
+    #region texts
+    public GameObject PointsText;
+    public GameObject FinalPointsText;
+    public GameObject GameOverText;
+    public GameObject PushSpaceText;
+    public GameObject RunPeetyText;
+#endregion
+   
 
     #region PieceCounters
 
@@ -56,21 +68,49 @@ public class EnvironmentEngine : MonoBehaviour
 
     }
 
+   
     // Update is called once per frame
+    
     void Update()
     {
-
-       
 
         if (gameStarted && !gameFinished)
         {
             MoveBackgroound();
             GenerateEnvironment();
+            UpdatePoints();
+            UpdateSpeedMultiplicator();
         }
 
-       
-
     }
+
+    private void UpdateSpeedMultiplicator()
+    {
+        float multiplicator = points / 150f;
+        multiplicator = multiplicator / 2f;
+        multiplicator = multiplicator + 1f;
+        speedMultiplicator = multiplicator;
+    }
+
+
+    private float nextTime = 0;
+    private void UpdatePoints()
+    {
+        if (nextTime == 0)
+        {
+            nextTime = Time.time;
+        }
+        if (Time.time >= nextTime)
+        {
+            points = points + 1;
+            Text textComponen = PointsText.GetComponent<Text>();
+            textComponen.text = "SCORE: " + points;
+            nextTime += 1;
+            Debug.Log("SpeedMultiplicator: "+speedMultiplicator);
+        }
+       
+    }
+
 
     void GameStart()
     {
@@ -84,10 +124,10 @@ public class EnvironmentEngine : MonoBehaviour
 
     void MoveBackgroound()
     {
-        FloorEngine.transform.Translate(Vector3.left * speed * Time.deltaTime);
-        ObstacleEngine.transform.Translate(Vector3.left * speed * Time.deltaTime);
-        FrontBackgroundEngine.transform.Translate(Vector3.left*(speed/1.2f)*Time.deltaTime);
-        BackBackgroundEngine.transform.Translate(Vector3.left*(speed/2f)*Time.deltaTime);
+        FloorEngine.transform.Translate(Vector3.left * (speed * speedMultiplicator) * Time.deltaTime);
+        ObstacleEngine.transform.Translate(Vector3.left * (speed * speedMultiplicator) * Time.deltaTime);
+        FrontBackgroundEngine.transform.Translate(Vector3.left*((speed * speedMultiplicator)/1.2f)*Time.deltaTime);
+        BackBackgroundEngine.transform.Translate(Vector3.left*((speed * speedMultiplicator)/2f)*Time.deltaTime);
 
     }
 
@@ -216,5 +256,26 @@ public class EnvironmentEngine : MonoBehaviour
         {
             Destroy(FirstObstacle);
         }
+    }
+
+    public void FinishGame()
+    {
+        gameFinished = true;
+        GameOverText.SetActive(true);
+
+        Text totalpoints = FinalPointsText.GetComponent<Text>();
+        totalpoints.text = points +" Punkte!";
+        FinalPointsText.SetActive(true);
+
+        PointsText.SetActive(false);
+        PushSpaceText.SetActive(true);
+    }
+
+    public void StartGame()
+    {
+        gameStarted = true;
+        PushSpaceText.SetActive(false);
+        RunPeetyText.SetActive(false);
+        PointsText.SetActive(true);
     }
 }
