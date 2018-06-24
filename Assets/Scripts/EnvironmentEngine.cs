@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Helpers;
 using UnityEngine;
+using UnityEngine.Assertions.Comparers;
 using Random = System.Random;
 
 public class EnvironmentEngine : MonoBehaviour
@@ -19,6 +20,7 @@ public class EnvironmentEngine : MonoBehaviour
     private GameObject FrontBackgroundEngine;
     private GameObject BackgroundProvider;
     private GameObject BackBackgroundEngine;
+    private GameObject ObstacleEngine;
 
     #region PieceCounters
 
@@ -42,6 +44,7 @@ public class EnvironmentEngine : MonoBehaviour
         FrontBackgroundEngine = GameObject.Find("FrontBackgroundEngine");
         BackgroundProvider = GameObject.Find("BackgroundProvider");
         BackBackgroundEngine = GameObject.Find("BackBackgroundEngine");
+        ObstacleEngine = GameObject.Find("ObstacleEngine");
         SetSpeed();
         InitializeBackgroundPieceOrder();
     }
@@ -62,9 +65,10 @@ public class EnvironmentEngine : MonoBehaviour
         if (gameStarted && !gameFinished)
         {
             MoveBackgroound();
+            GenerateEnvironment();
         }
 
-        GenerateEnvironment();
+       
 
     }
 
@@ -81,6 +85,7 @@ public class EnvironmentEngine : MonoBehaviour
     void MoveBackgroound()
     {
         FloorEngine.transform.Translate(Vector3.left * speed * Time.deltaTime);
+        ObstacleEngine.transform.Translate(Vector3.left * speed * Time.deltaTime);
         FrontBackgroundEngine.transform.Translate(Vector3.left*(speed/1.2f)*Time.deltaTime);
         BackBackgroundEngine.transform.Translate(Vector3.left*(speed/2f)*Time.deltaTime);
 
@@ -91,6 +96,7 @@ public class EnvironmentEngine : MonoBehaviour
         GenerateFloor();
         GenerateFrontBackground();
         GenerateBackBackground();
+        GenerateObstacles();
 
         CleanEnvironment();
     }
@@ -144,6 +150,22 @@ public class EnvironmentEngine : MonoBehaviour
 
     }
 
+    void GenerateObstacles()
+    {
+        List<GameObject> Obstacles = GameObject.FindGameObjectsWithTag("Rock").ToList();
+        if (Obstacles.Count <= 3)
+        {
+            GameObject lastObstacle = Obstacles.OrderByDescending(o=>o.transform.position.x).First();
+            GameObject newObstacle = Instantiate(lastObstacle);
+            newObstacle.gameObject.transform.parent = ObstacleEngine.transform;
+
+            Random random = new Random();
+            int randomDistance = random.Next(15, 30);
+
+            newObstacle.gameObject.transform.position = new Vector2(lastObstacle.gameObject.transform.position.x + randomDistance,lastObstacle.gameObject.transform.position.y);
+        }
+    }
+
 
 
     private GameObject GetRandomBackground(BackgroundType type)
@@ -186,6 +208,13 @@ public class EnvironmentEngine : MonoBehaviour
         if((FirstBackBackground.transform.position.x + FirstBackBackground.GetComponent<SpriteRenderer>().bounds.size.x)< ScreenLimits.x)
         {
             Destroy(FirstBackBackground);
+        }
+
+        List<GameObject> Obstacles = GameObject.FindGameObjectsWithTag("Rock").ToList();
+        GameObject FirstObstacle = Obstacles.OrderBy(o => o.transform.position.x).First();
+        if (FirstObstacle.transform.position.x < ScreenLimits.x)
+        {
+            Destroy(FirstObstacle);
         }
     }
 }

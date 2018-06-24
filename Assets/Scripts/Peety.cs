@@ -9,6 +9,7 @@ public class Peety : MonoBehaviour
     private Animation anim;
     private Rigidbody2D rigidBody;
     public int JumpSpeed;
+    private EnvironmentEngine environmentEngine;
 
 	// Use this for initialization
 	void Start ()
@@ -16,6 +17,7 @@ public class Peety : MonoBehaviour
 	    animator = GetComponent<Animator>();
 	    anim = GetComponent<Animation>();
 	    rigidBody = GetComponent<Rigidbody2D>();
+	    environmentEngine = GameObject.Find("EnvironmentEngine").GetComponent<EnvironmentEngine>();
 	}
 	
 	// Update is called once per frame
@@ -23,21 +25,21 @@ public class Peety : MonoBehaviour
     
 	void Update () {
      
-        Debug.Log(rigidBody.position.y);
+     
 	    
 	    if(rigidBody.position.y < -2f)
 	    {
-	        Debug.Log("Running");
+	       
             
 	        animator.SetInteger("JumpState",0);
 	    }else if (rigidBody.position.y  > positionY )
 	    {
-            Debug.Log("GoesUp");
+            
 	       animator.SetInteger("JumpState",1);
 	    }
         else if (rigidBody.position.y < positionY)
 	    {
-	        Debug.Log("GoesDown");
+	       
 	        animator.SetInteger("JumpState",2);
 	    }
 	    
@@ -65,11 +67,20 @@ public class Peety : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log("Enter");
+       
     }
 
     void OnCollisionExit2D(Collision2D col)
     {
-        Debug.Log("Exit");
+
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        GameObject collisionGO = col.gameObject;
+        if (collisionGO.CompareTag("Rock"))
+        {
+            environmentEngine.gameFinished = true;
+        }
     }
 }
