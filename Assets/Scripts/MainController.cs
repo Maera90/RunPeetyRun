@@ -22,7 +22,7 @@ public class MainController : MonoBehaviour
 
 	    #region Inputs
 
-	    if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+	    if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.touchCount > 0)
 	    {
 	        if (_environmentEngine.gameFinished)
 	        {
