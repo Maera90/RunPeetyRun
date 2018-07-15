@@ -22,8 +22,11 @@ public class MainController : MonoBehaviour
 
 	    #region Inputs
 
-	    if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.touches.Length > 0)
+	    if (Input.GetKeyDown(KeyCode.Space) || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
 	    {
+	       
+
+
 	        if (_environmentEngine.gameFinished)
 	        {
 	            Scene sceneToReload = SceneManager.GetActiveScene();

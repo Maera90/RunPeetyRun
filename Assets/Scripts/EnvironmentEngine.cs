@@ -200,7 +200,7 @@ public class EnvironmentEngine : MonoBehaviour
             newObstacle.gameObject.transform.parent = ObstacleEngine.transform;
 
             Random random = new Random();
-            int randomDistance = random.Next(15, 30);
+            int randomDistance = Convert.ToInt32(random.Next(15, 30) * speedMultiplicator);
 
             newObstacle.gameObject.transform.position = new Vector2(lastObstacle.gameObject.transform.position.x + randomDistance,lastObstacle.gameObject.transform.position.y);
         }

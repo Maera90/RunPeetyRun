@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 public class PointsManager : MonoBehaviour {
 
     public List<RunPeetyPoint> points { get; set; }
-    private const string URL = "apimaderaplayground.de/RunPeetyPoints";
+    private const string URL = "http://api.maderaplayground.de/public/RunPeetyPoints";
     public string Error { get; set; }
 
     public void GetPoints()
