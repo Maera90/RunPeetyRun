@@ -260,6 +260,8 @@ public class EnvironmentEngine : MonoBehaviour
 
     public void FinishGame()
     {
+        //PointsManager manager = new PointsManager();
+        //manager.GetPoints();
         gameFinished = true;
         GameOverText.SetActive(true);
 
