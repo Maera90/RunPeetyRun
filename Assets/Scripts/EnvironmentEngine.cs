@@ -86,7 +86,7 @@ public class EnvironmentEngine : MonoBehaviour
 
     private void UpdateSpeedMultiplicator()
     {
-        float multiplicator = points / 150f;
+        float multiplicator = points / 100f;
         multiplicator = multiplicator / 2f;
         multiplicator = multiplicator + 1f;
         speedMultiplicator = multiplicator;
