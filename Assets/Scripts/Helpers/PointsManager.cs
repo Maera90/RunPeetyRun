@@ -15,6 +15,12 @@ namespace Assets.Scripts.Helpers
         void Start()
         {
             StartCoroutine(GetPoints());
+            RunPeetyPoint point = new RunPeetyPoint()
+            {
+                name = "Daniel",
+                points = 666
+            };
+            StartCoroutine(PostPoints(point));
         }
 
         IEnumerator GetPoints()
@@ -33,6 +39,28 @@ namespace Assets.Scripts.Helpers
                     pointsSet = JsonUtility.FromJson<RunPeetyPointSet>(jsonString);
                 }
             }
+        }
+
+        IEnumerator PostPoints(RunPeetyPoint point)
+        {
+
+            string pointJson = JsonUtility.ToJson(point);
+            Encoder encoder = new Encoder();
+
+            string encodedPoint = encoder.encodeString(pointJson);
+            Dictionary<string,string> postData = new Dictionary<string, string>();
+            postData.Add("encodedPoint",encodedPoint);
+
+            using (UnityWebRequest www = UnityWebRequest.Post(URL, postData))
+            {
+                yield return www.SendWebRequest();
+                if (www.isHttpError)
+                {
+                    Debug.Log(www.error);
+                }
+               
+            }
+
         }
 
         
