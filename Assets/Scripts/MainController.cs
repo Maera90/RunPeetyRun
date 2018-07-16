@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Helpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,6 +16,8 @@ public class MainController : MonoBehaviour
 
         EnviromentEngineGO = GameObject.Find("EnvironmentEngine");
 	    _environmentEngine = EnviromentEngineGO.GetComponent<EnvironmentEngine>();
+        
+        
 	}
 	
 	// Update is called once per frame
