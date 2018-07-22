@@ -48,6 +48,12 @@ public class MainController : MonoBehaviour
 	        }       
 	    }
 
+        //Ducking
+	    if (Input.GetKeyDown(KeyCode.DownArrow))
+	    {
+	        _peety.Duck();
+	    }
+
 	    #endregion
 
         //Set Peety Speed Running animation speed
