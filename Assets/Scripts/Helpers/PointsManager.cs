@@ -20,7 +20,7 @@ namespace Assets.Scripts.Helpers
                 name = "Daniel",
                 points = 666
             };
-            StartCoroutine(PostPoints(point));
+            //StartCoroutine(PostPoints(point));
         }
 
         IEnumerator GetPoints()
