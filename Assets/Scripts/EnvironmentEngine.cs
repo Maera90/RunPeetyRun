@@ -16,6 +16,8 @@ public class EnvironmentEngine : MonoBehaviour
     public bool gameFinished;
     public int points = 0;
     public float speedMultiplicator = 1;
+    public GameObject Rock;
+    public GameObject Meteor;
 
     private GameObject FloorEngine;
     private GameObject CameraGO;
@@ -24,15 +26,15 @@ public class EnvironmentEngine : MonoBehaviour
     private GameObject BackgroundProvider;
     private GameObject BackBackgroundEngine;
     private GameObject ObstacleEngine;
-
+    private List<GameObject> obstacles = new List<GameObject>();
     #region texts
     public GameObject PointsText;
     public GameObject FinalPointsText;
     public GameObject GameOverText;
     public GameObject PushSpaceText;
     public GameObject RunPeetyText;
-#endregion
-   
+    #endregion
+
 
     #region PieceCounters
 
@@ -59,6 +61,8 @@ public class EnvironmentEngine : MonoBehaviour
         ObstacleEngine = GameObject.Find("ObstacleEngine");
         SetSpeed();
         InitializeBackgroundPieceOrder();
+        obstacles.Add(GameObject.FindGameObjectWithTag("Rock"));
+        obstacles.Add(GameObject.FindGameObjectWithTag("Meteor"));
     }
 
     private void InitializeBackgroundPieceOrder()
@@ -68,9 +72,9 @@ public class EnvironmentEngine : MonoBehaviour
 
     }
 
-   
+
     // Update is called once per frame
-    
+
     void Update()
     {
 
@@ -106,9 +110,9 @@ public class EnvironmentEngine : MonoBehaviour
             Text textComponen = PointsText.GetComponent<Text>();
             textComponen.text = "SCORE: " + points;
             nextTime += 1;
-            Debug.Log("SpeedMultiplicator: "+speedMultiplicator);
+            Debug.Log("SpeedMultiplicator: " + speedMultiplicator);
         }
-       
+
     }
 
 
@@ -126,19 +130,35 @@ public class EnvironmentEngine : MonoBehaviour
     {
         FloorEngine.transform.Translate(Vector3.left * (speed * speedMultiplicator) * Time.deltaTime);
         ObstacleEngine.transform.Translate(Vector3.left * (speed * speedMultiplicator) * Time.deltaTime);
-        FrontBackgroundEngine.transform.Translate(Vector3.left*((speed * speedMultiplicator)/1.2f)*Time.deltaTime);
-        BackBackgroundEngine.transform.Translate(Vector3.left*((speed * speedMultiplicator)/2f)*Time.deltaTime);
-
+        FrontBackgroundEngine.transform.Translate(Vector3.left * ((speed * speedMultiplicator) / 1.2f) * Time.deltaTime);
+        BackBackgroundEngine.transform.Translate(Vector3.left * ((speed * speedMultiplicator) / 2f) * Time.deltaTime);
+        //Vector2 targetPosition = new Vector2(10, 0);
+        Vector2 moveTo = new Vector2(-8.29f,-5.96f);
+        Meteor.transform.position = Vector2.MoveTowards(Meteor.transform.position,moveTo,(speed * speedMultiplicator)*Time.deltaTime);
     }
 
+    private float generateTime = 0;
     void GenerateEnvironment()
     {
+      
         GenerateFloor();
         GenerateFrontBackground();
         GenerateBackBackground();
-        GenerateObstacles();
-
+       
         CleanEnvironment();
+
+        if (generateTime == 0)
+        {
+            generateTime = Time.time;
+        }
+
+        if (Time.time >= generateTime)
+        {
+            GenerateObstacles();
+            generateTime +=2;
+        }
+        
+
     }
 
     void GenerateFloor()
@@ -174,7 +194,7 @@ public class EnvironmentEngine : MonoBehaviour
     void GenerateFrontBackground()
     {
         List<GameObject> FrontBackgroundPieces = GameObject.FindGameObjectsWithTag("FrontBackground").ToList();
-      
+
         if (FrontBackgroundPieces.Count <= 3)
         {
             GameObject randomFrontBackground = GetRandomBackground(BackgroundType.Front);
@@ -192,18 +212,28 @@ public class EnvironmentEngine : MonoBehaviour
 
     void GenerateObstacles()
     {
-        List<GameObject> Obstacles = GameObject.FindGameObjectsWithTag("Rock").ToList();
-        if (Obstacles.Count <= 3)
+
+        
+        Random random = new Random();
+        int randomIndex = random.Next(0,obstacles.Count);
+        GameObject randomObstacle = obstacles[randomIndex];
+
+        string tag = randomObstacle.tag;
+        Vector2 targetPosition = new Vector2(10,10);
+        switch (tag)
         {
-            GameObject lastObstacle = Obstacles.OrderByDescending(o=>o.transform.position.x).First();
-            GameObject newObstacle = Instantiate(lastObstacle);
-            newObstacle.gameObject.transform.parent = ObstacleEngine.transform;
-
-            Random random = new Random();
-            int randomDistance = Convert.ToInt32(random.Next(15, 30) * speedMultiplicator);
-
-            newObstacle.gameObject.transform.position = new Vector2(lastObstacle.gameObject.transform.position.x + randomDistance,lastObstacle.gameObject.transform.position.y);
+            case "Rock":
+                targetPosition = new Vector2(10,randomObstacle.gameObject.transform.position.y);
+                randomObstacle.gameObject.transform.position = targetPosition;
+                break;
+            case "Meteor":
+                targetPosition = new Vector2(10,0);
+                Vector2 moveTo = new Vector2(-11f,-5f);
+                randomObstacle.gameObject.transform.position = Vector2.MoveTowards(targetPosition,moveTo,10*Time.deltaTime);
+                break;
         }
+
+      
     }
 
 
@@ -212,7 +242,7 @@ public class EnvironmentEngine : MonoBehaviour
     {
         GameObject backgroundPiece = new GameObject();
         System.Random random = new Random();
-        
+
         if (type == BackgroundType.Front)
         {
             List<GameObject> FrontBackgrounds = GameObject.FindGameObjectsWithTag("FrontBackgroundSource").ToList();
@@ -245,7 +275,7 @@ public class EnvironmentEngine : MonoBehaviour
             Destroy(FirstFrontBackground);
         }
 
-        if((FirstBackBackground.transform.position.x + FirstBackBackground.GetComponent<SpriteRenderer>().bounds.size.x)< ScreenLimits.x)
+        if ((FirstBackBackground.transform.position.x + FirstBackBackground.GetComponent<SpriteRenderer>().bounds.size.x) < ScreenLimits.x)
         {
             Destroy(FirstBackBackground);
         }
@@ -254,7 +284,7 @@ public class EnvironmentEngine : MonoBehaviour
         GameObject FirstObstacle = Obstacles.OrderBy(o => o.transform.position.x).First();
         if (FirstObstacle.transform.position.x < ScreenLimits.x)
         {
-            Destroy(FirstObstacle);
+            RepositionObstable(FirstObstacle);
         }
     }
 
@@ -266,7 +296,7 @@ public class EnvironmentEngine : MonoBehaviour
         GameOverText.SetActive(true);
 
         Text totalpoints = FinalPointsText.GetComponent<Text>();
-        totalpoints.text = points +" Punkte!";
+        totalpoints.text = points + " Punkte!";
         FinalPointsText.SetActive(true);
 
         PointsText.SetActive(false);
@@ -279,5 +309,10 @@ public class EnvironmentEngine : MonoBehaviour
         PushSpaceText.SetActive(false);
         RunPeetyText.SetActive(false);
         PointsText.SetActive(true);
+    }
+
+    public void RepositionObstable(GameObject gameObject)
+    {
+
     }
 }

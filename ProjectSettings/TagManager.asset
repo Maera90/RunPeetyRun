@@ -11,6 +11,8 @@ TagManager:
   - FrontBackgroundSource
   - BackBackgroundPiece
   - Rock
+  - Obstacle
+  - Meteor
   layers:
   - Default
   - TransparentFX
