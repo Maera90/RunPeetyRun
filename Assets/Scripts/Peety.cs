@@ -114,13 +114,13 @@ public class Peety : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        //GameObject collisionGO = col.gameObject;
-        //if (collisionGO.CompareTag("Rock"))
-        //{
-        //    environmentEngine.FinishGame();
-        //    animator.SetBool("IsDead",true);
+        GameObject collisionGO = col.gameObject;
+        if (collisionGO.CompareTag("Rock")||collisionGO.CompareTag("Meteor"))
+        {
+            environmentEngine.FinishGame();
+            animator.SetBool("IsDead", true);
 
-        //}
+        }
     }
 
     void StartDucking()

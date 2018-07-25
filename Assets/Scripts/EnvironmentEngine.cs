@@ -133,7 +133,7 @@ public class EnvironmentEngine : MonoBehaviour
         FrontBackgroundEngine.transform.Translate(Vector3.left * ((speed * speedMultiplicator) / 1.2f) * Time.deltaTime);
         BackBackgroundEngine.transform.Translate(Vector3.left * ((speed * speedMultiplicator) / 2f) * Time.deltaTime);
         //Vector2 targetPosition = new Vector2(10, 0);
-        Vector2 moveTo = new Vector2(-8.29f,-5.96f);
+        Vector2 moveTo = new Vector2(-12f,-5.96f);
         Meteor.transform.position = Vector2.MoveTowards(Meteor.transform.position,moveTo,(speed * speedMultiplicator)*Time.deltaTime);
     }
 
