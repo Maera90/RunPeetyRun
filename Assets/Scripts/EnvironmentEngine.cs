@@ -14,7 +14,7 @@ public class EnvironmentEngine : MonoBehaviour
     public float speed;
     public bool gameStarted;
     public bool gameFinished;
-    public int points = 0;
+    public int points = 100;
     public float speedMultiplicator = 1;
     public GameObject Rock;
     public GameObject Meteor;
@@ -26,6 +26,8 @@ public class EnvironmentEngine : MonoBehaviour
     private GameObject BackgroundProvider;
     private GameObject BackBackgroundEngine;
     private GameObject ObstacleEngine;
+    public GameObject PostPoints;
+    
     private List<GameObject> obstacles = new List<GameObject>();
     #region texts
     public GameObject PointsText;
@@ -301,6 +303,7 @@ public class EnvironmentEngine : MonoBehaviour
 
         PointsText.SetActive(false);
         PushSpaceText.SetActive(true);
+        PostPoints.SetActive(true);
     }
 
     public void StartGame()

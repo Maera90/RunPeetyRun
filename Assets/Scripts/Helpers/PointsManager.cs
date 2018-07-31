@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using Assets.Scripts.Models;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Helpers
 {
     public class PointsManager : MonoBehaviour {
 
         public RunPeetyPointSet pointsSet { get; set; }
-        private const string URL = "http://api.maderaplayground.de/public/RunPeetyPoints";
+        private const string URL = "https://api.maderaplayground.de/RunPeetyPoints";
         public string Error { get; set; }
 
+        public Text LabelPrefab;
+        public InputField NameField;
+        public EnvironmentEngine EnviromentEngine;
         void Start()
         {
             StartCoroutine(GetPoints());
-            RunPeetyPoint point = new RunPeetyPoint()
-            {
-                name = "Daniel",
-                points = 666
-            };
-            //StartCoroutine(PostPoints(point));
+          
+            
         }
 
         IEnumerator GetPoints()
@@ -37,8 +37,32 @@ namespace Assets.Scripts.Helpers
                     string jsonString = www.downloadHandler.text;
                     pointsSet = new RunPeetyPointSet();
                     pointsSet = JsonUtility.FromJson<RunPeetyPointSet>(jsonString);
+
+                    GameObject container = GameObject.FindGameObjectWithTag("PointsContainer");
+
+                    foreach (RunPeetyPoint singlePoint in pointsSet.data)
+                    {
+                        Text instantiate = Instantiate(LabelPrefab, container.transform);
+                        instantiate.text = singlePoint.name + " - " + singlePoint.points ;
+                    }
+
                 }
             }
+        }
+
+        public void SavePoints()
+        {
+            string name = NameField.text;
+            RunPeetyPoint point = new RunPeetyPoint();
+            if (!string.IsNullOrEmpty(name))
+            {
+                point.name = name;
+                point.points = EnviromentEngine.points;
+
+                StartCoroutine(PostPoints(point));
+            }
+          
+           
         }
 
         IEnumerator PostPoints(RunPeetyPoint point)

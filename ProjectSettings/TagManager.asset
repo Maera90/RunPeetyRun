@@ -13,6 +13,7 @@ TagManager:
   - Rock
   - Obstacle
   - Meteor
+  - PointsContainer
   layers:
   - Default
   - TransparentFX
