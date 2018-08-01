@@ -27,6 +27,8 @@ public class EnvironmentEngine : MonoBehaviour
     private GameObject BackBackgroundEngine;
     private GameObject ObstacleEngine;
     public GameObject PostPoints;
+    public GameObject PointList;
+    public GameObject RestartGameButton;
     
     private List<GameObject> obstacles = new List<GameObject>();
     #region texts
@@ -302,8 +304,9 @@ public class EnvironmentEngine : MonoBehaviour
         FinalPointsText.SetActive(true);
 
         PointsText.SetActive(false);
-        PushSpaceText.SetActive(true);
+        RestartGameButton.SetActive(true);
         PostPoints.SetActive(true);
+        PointList.SetActive(true);
     }
 
     public void StartGame()

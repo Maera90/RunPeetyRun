@@ -16,6 +16,8 @@ namespace Assets.Scripts.Helpers
         public Text LabelPrefab;
         public InputField NameField;
         public EnvironmentEngine EnviromentEngine;
+        public GameObject PostPointsGO;
+        public GameObject PointContainer;
         void Start()
         {
             StartCoroutine(GetPoints());
@@ -38,12 +40,30 @@ namespace Assets.Scripts.Helpers
                     pointsSet = new RunPeetyPointSet();
                     pointsSet = JsonUtility.FromJson<RunPeetyPointSet>(jsonString);
 
-                    GameObject container = GameObject.FindGameObjectWithTag("PointsContainer");
-
+                   
+                    int counter = 1;
                     foreach (RunPeetyPoint singlePoint in pointsSet.data)
                     {
-                        Text instantiate = Instantiate(LabelPrefab, container.transform);
-                        instantiate.text = singlePoint.name + " - " + singlePoint.points ;
+                        Text instantiate = Instantiate(LabelPrefab, PointContainer.transform);
+                        instantiate.text = singlePoint.name + " - " + singlePoint.points;
+                        Color color;
+                        switch (counter)
+                        {
+                            case 1:
+                                color = Color.yellow;
+                                break;
+                            case 2:
+                                color = Color.gray;
+                                break;
+                            case 3:
+                                color = Color.red;
+                                break;
+                            default:
+                                color = Color.white;
+                                break;
+                        }
+                        instantiate.color = color;
+                        counter++;
                     }
 
                 }
@@ -81,6 +101,10 @@ namespace Assets.Scripts.Helpers
                 if (www.isHttpError)
                 {
                     Debug.Log(www.error);
+                }
+                else
+                {
+                    PostPointsGO.SetActive(false);
                 }
                
             }

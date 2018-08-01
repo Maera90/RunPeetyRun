@@ -32,8 +32,7 @@ public class MainController : MonoBehaviour
 
 	        if (_environmentEngine.gameFinished)
 	        {
-	            Scene sceneToReload = SceneManager.GetActiveScene();
-                SceneManager.LoadScene(sceneToReload.name);
+	           ReloadGame();
 	        }
 
 	        if (!_environmentEngine.gameStarted)
@@ -46,6 +45,16 @@ public class MainController : MonoBehaviour
 	        {
 	            _peety.Jump();
 	        }       
+	    }
+
+        //Start Game!!
+	    if (Input.GetKeyDown(KeyCode.Space) || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+	    {
+	        if (!_environmentEngine.gameStarted && !_environmentEngine.gameFinished)
+	        {
+                _peety.Run();
+                _environmentEngine.StartGame();
+	        }
 	    }
 
         //Ducking
@@ -61,6 +70,12 @@ public class MainController : MonoBehaviour
 
 
 	}
+
+    public void ReloadGame()
+    {
+        Scene sceneToReload = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(sceneToReload.name);
+    }
 
     
 }
