@@ -25,6 +25,7 @@ public class Peety : MonoBehaviour
 
     #region TempVariables
     private float lastDuckTime = 0;
+    private float lastRushTime = 0;
     #endregion
 
 
@@ -77,6 +78,12 @@ public class Peety : MonoBehaviour
 	        StopDucking();
 
 	    }
+
+        //Reset Rush Position
+	    if (Time.time > (lastRushTime + 1) && animator.GetBool("IsRushing"))
+	    {
+            StopRushing();
+	    }
 	}
 
     public void Run()
@@ -110,6 +117,17 @@ public class Peety : MonoBehaviour
         }
     }
 
+    //Rushing
+    //Only Available while not jumping or ducking
+    public void Rush()
+    {
+        if (animator.GetInteger("JumpState") == 0 && animator.GetBool("IsDucking") == false)
+        {
+            animator.SetBool("IsRushing",true);
+            lastRushTime = Time.time;
+        }
+    }
+
    
 
     void OnTriggerEnter2D(Collider2D col)
@@ -137,5 +155,10 @@ public class Peety : MonoBehaviour
         dustParticles.Stop();
         boxCollider.size = OriginalBoxColliderSize;
         boxCollider.offset = OriginalBoxColliderOffset;
+    }
+
+    void StopRushing()
+    {
+        animator.SetBool("IsRushing",false);
     }
 }
